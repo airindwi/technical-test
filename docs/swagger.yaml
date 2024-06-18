@@ -1,0 +1,134 @@
+openapi: 3.0.0
+info:
+  title: Driver App API
+  version: 1.0.0
+  description: This is the API documentation for the Driver App
+  contact:
+    email: your-email@example.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: http://localhost:8000/api
+    description: Local server
+paths:
+  /auth/user/register:
+    post:
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: John Doe
+                email:
+                  type: string
+                  example: user@example.com
+                password:
+                  type: string
+                  example: password
+      responses:
+        '201':
+          description: User registered successfully
+  /auth/driver/register:
+    post:
+      summary: Register a new driver
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Jane Doe
+                email:
+                  type: string
+                  example: driver@example.com
+                password:
+                  type: string
+                  example: password
+      responses:
+        '201':
+          description: Driver registered successfully
+  /auth/login:
+    post:
+      summary: Login 
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: user@example.com
+                password:
+                  type: string
+                  example: password
+      responses:
+        '200':
+          description: User logged in successfully
+  /user/trip:
+    post:
+      summary: Create a new trip
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                start_location:
+                  type: string
+                  example: Bandung
+                end_location:
+                  type: string
+                  example: Jakarta
+      responses:
+        '200':
+          description: Trip created successfully
+  /user/trips:
+    get:
+      summary: View user's trips
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List of user's trips
+  /driver/trips:
+    get:
+      summary: View available trips
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List of available trips
+  /driver/trip/{id}:
+    post:
+      summary: Accept a trip
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Trip accepted successfully
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
